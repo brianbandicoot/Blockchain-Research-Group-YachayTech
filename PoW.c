@@ -3,6 +3,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include<time.h>
+
 //All variables and global functions are defined in variables.h
 #include"variables.h"
 //This library is for the SHA256 function implementation
@@ -36,11 +37,17 @@ const int switchPoW (const BYTE buf[], const int difficulty){
   int cond = 0;
   for(int i=0; i<difficulty;i++)
     //If there is any zero at the beginning then it is not valid (check PoW function as well)
+
+int switchPoW (BYTE buf[SHA256_BLOCK_SIZE], int difficulty){
+  int cond = 0;
+  for(int i=0; i<difficulty;i++)
+    //If there is any zero at the buf part then switch the conditional
     if (buf[i]>0)
       cond++;
 
   return cond;
 }
+
 
 //Creates the input for the SHA256 function
 void createpreInput(const struct block *preBlock,char *result){
@@ -56,7 +63,7 @@ void createpreInput(const struct block *preBlock,char *result){
   strcat(result,sep);
   //A tricky step to concatenate a number in the result string
   char IB[4];
-  sprintf(IB,"%d",preBlock->index);
+  sprintf(IB,"%Lf",preBlock->index);
   strcat(result,IB);
   strcat(result,sep);
 }
@@ -83,6 +90,7 @@ void PoW (struct block * currentBlock, const int difficulty){
   BYTE NB[10];
   sprintf(NB,"%Lf",newNonce);
   strcat(newInput,NB);
+
 
   //This is all SHA256 implementation #IDontUnderstandItYet
   BYTE newHash[SHA256_BLOCK_SIZE];
@@ -121,6 +129,5 @@ void PoW (struct block * currentBlock, const int difficulty){
   currentBlock->nonce = newNonce;
   /*puts("\nBlock Hash found:");
   printfHash(newHash);
-  printfHash(currentBlock->blockHash);
-  printf("\nNonce used: %Lf",newNonce);*/
+  printfHash(currentBlock->blockHash);*/
 }
