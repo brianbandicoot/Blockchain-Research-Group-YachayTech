@@ -1,4 +1,4 @@
-
+//This file is not ready yet
 struct* Sendbitcoin(struct transaction preTx1,
                  struct transaction preTx2,
                  char* receiverAddress)
