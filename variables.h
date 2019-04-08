@@ -5,12 +5,11 @@
 #include<time.h>
 #include "sha256.h"
 
-
 time_t rawtime;
 struct tm * timeinfo;
 
-struct transaction
-{
+//This is not ready yet
+struct transaction{
   int index;
   char* previousTx1;
   char* previousTx2;
@@ -19,29 +18,40 @@ struct transaction
   char* txHash;
 };
 
-struct wallet
-{
+//This is not ready yet
+struct wallet{
   char* publickey;
   char* privatekey;
 };
 
-struct block
-{
+//The Block structure. The sizes are not ready #Help!
+struct block{
   int index;
-  char *timestamp;
-  char *merkleroot;
-  char *previousHash;
-  int blockHash[SHA256_BLOCK_SIZE+1];
-  char *minerAddress;
+  char timeStamp[25];
+  char merkleRoot[(SHA256_BLOCK_SIZE*2)+1];
+  BYTE previousHash[(SHA256_BLOCK_SIZE*2)+1];
+  BYTE blockHash[(SHA256_BLOCK_SIZE*2)-2];
+  char minerAddress[37];
   long double nonce;
 };
 
-struct blockchain
-{
+//This is not ready yet
+struct blockchain{
   int size;
   char* leadingBlock;
 };
 
-void PoW (struct block *, int);
-void writeBlock(struct block * );
+
+/*I just defined all functions that are used in different files.
+Should we put it on different header files (.h)? */
+//PoW.c
+void printfHash(const BYTE*);
 const char *byteToBinary(int);
+void PoW (struct block *, int);
+void createpreInput(const struct block *,char *);
+
+//file.c
+void copyString(char*,const char*,const int);
+void writeBlock(const struct block *);
+void readBlock(struct block *, const int);
+void readBlockchain(struct block *);
