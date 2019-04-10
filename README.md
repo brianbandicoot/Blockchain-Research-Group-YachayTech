@@ -9,7 +9,7 @@ To read our code:
 2. You might need to visit variables.h to learn about the struct block definition
 3. When you reach PoW(&B), look at the PoW.c code to understand its internal functioning
 4. When you reach write(&B) or read(&B), look at the file.c code to understand how are we saving the block data
-Posdata: Remember that the code is INCOMPLETE, sorry for any trouble or misunderstanding.
+ (Posdata: Remember that the code is INCOMPLETE, sorry for any trouble or misunderstanding)
 
 To try our code:
 
