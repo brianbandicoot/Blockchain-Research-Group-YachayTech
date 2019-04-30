@@ -12,7 +12,7 @@ void copyString(char destination[],const char source[],const int size){
   destination[size] = '\0';
 }
 
-//It does what the name says
+//It writes the block B into the blockchain.dat
 void writeBlock(const struct block *B){
    FILE *fp;
    //Opens a blockchain.dat and append the new infomration
@@ -38,7 +38,7 @@ void readBlock(struct block* B, const int index){
    //To get the data tags ex: "BlockHash", "MinerAddress", etc
    char name[14];
    //To get the blockhash data as a string from blockchain.dat
-   char tempHash[(SHA256_BLOCK_SIZE)*2-2];
+   BYTE tempHash[(SHA256_BLOCK_SIZE)*2-2];
    //It reads the first line of the blockchain.dat file
    fp = fopen("blockchain.dat", "a+");
    fscanf(fp,"%s %d",name,&B->index);
@@ -49,11 +49,13 @@ void readBlock(struct block* B, const int index){
    B->previousHash[SHA256_BLOCK_SIZE*2] = '\0';
    fscanf(fp,"%s %s\n",name,tempHash);
    tempHash[(SHA256_BLOCK_SIZE*2)-2] = '\0';
+   printf("tempHash %s\n",tempHash);
 
    //A tricky step to get the blockHash as it should be
    for(int i=0; i<(SHA256_BLOCK_SIZE)*2-2; i++)
-     B->blockHash[i] = (int) tempHash[i];
+     B->blockHash[i] = tempHash[i];
 
+   printf("blockHash %s\n",B->blockHash);
    fscanf(fp,"%s %s\n",name,B->minerAddress);
    B->minerAddress[36] = '\0';
    fscanf(fp,"%s %Lf\n",name,&B->nonce);
@@ -74,24 +76,36 @@ int validate(struct block *B){
   BYTE NB[10];
   sprintf(NB,"%Lf",B->nonce);
   strcat(newInput,NB);
+  puts("");
+  printf("ReadInput: %s \n",newInput);
+  puts("");
+  printf("strcmp: %d\n",strcmp(newInput,compInp));
 
   BYTE newHash[SHA256_BLOCK_SIZE];
+  char newHash2[SHA256_BLOCK_SIZE*2];
   SHA256_CTX ctx;
   sha256_init(&ctx);
   sha256_update(&ctx, newInput, strlen(newInput));
   sha256_final(&ctx, newHash);
 
-  puts("HashingReaded:");
-  for(int i=0; i<SHA256_BLOCK_SIZE;i++)
-    printf("%X",newHash[i]);
+  printf("HashingReaded ");
+
+  //sprintf(newHash2,"%X",newHash); It is not good
+  for(int i=0; i<SHA256_BLOCK_SIZE;i++){
+    sprintf(&newHash2[i],"%.2X",newHash[i]);
+    //printf("%c",newHash2[i]);
+  }
+  printf("%s \n",newHash2);
   puts("");
 
+  valid = strcmp(newHash2,B->blockHash);
+
   //This is not working yet #Help!
-  for(int i=0; i<SHA256_BLOCK_SIZE;i++)
-    if(newHash[i]!=B->blockHash[i]){
-      valid = 0;
+  //for(int i=0; i<SHA256_BLOCK_SIZE;i++)
+    //if(newHash[i]!=B->blockHash[i]){
+      //valid = 0;
       //printf("newHash: %c blockHash: %c valid:%d\n",newHash[i],B->blockHash[i],valid);
-    }
+    //}
 
   return valid;
 }

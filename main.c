@@ -13,15 +13,14 @@ gcc -o test main.c PoW.c sha256.c file.c -I.
 //This library is for the SHA256 function implementation
 #include "sha256.h"
 
+
+
 //It prints all the information of a block (All data that is stored at blockchain.dat)
 void printBlock(struct block * B){
   printf("Index: %d \n",B->index);
   printf("MerkleRoot: %s \n",B->merkleRoot);
   printf("PreviousHash: %s \n",B->previousHash);
-  printf("BlockHash: ");
-  for(int i=0; i<(SHA256_BLOCK_SIZE)*2-2; i++)
-   printf("%X",B->blockHash[i]); //I am not sure if use %X or %c
-  puts("");
+  printf("BlockHash: %s\n", B->blockHash);
   printf("MinerAddress: %s \n",B->minerAddress);
   printf("Nonce: %Lf \n",B->nonce);
   printf("TimeStamp: %s \n",B->timeStamp);
@@ -58,7 +57,7 @@ int main(void){
   //We store the B1 information in blockchain.dat
   writeBlock(&B1);
   //We store the B2 information in blockchain.dat
-  writeBlock(&B2);
+  //writeBlock(&B2);
   //We saved the timestamp of last modification of blockchain.dat
   time (&rawtime);
   timeinfo = localtime ( &rawtime );
@@ -68,7 +67,8 @@ int main(void){
   struct block B3;
   //We read the blockchain.dat and store the data of block index 1
   readBlock(&B3,1);
-  printBlock(&B3);
+  //printBlock(&B3);
+  int a = validate(&B3);
 
 
 
@@ -88,5 +88,6 @@ int main(void){
     }
     //sleep(300);
   }*/
+
   return 0;
 }

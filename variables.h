@@ -7,6 +7,7 @@
 
 time_t rawtime;
 struct tm * timeinfo;
+char compInp[1000];
 
 //This is not ready yet
 struct transaction{
@@ -30,6 +31,7 @@ struct block{
   char timeStamp[25];
   char merkleRoot[(SHA256_BLOCK_SIZE*2)+1];
   BYTE previousHash[(SHA256_BLOCK_SIZE*2)+1];
+  //if char instead of BYTE then smack error!
   BYTE blockHash[(SHA256_BLOCK_SIZE*2)-2];
   char minerAddress[37];
   long double nonce;
@@ -55,3 +57,4 @@ void copyString(char*,const char*,const int);
 void writeBlock(const struct block *);
 void readBlock(struct block *, const int);
 void readBlockchain(struct block *);
+int validate(struct block *);
