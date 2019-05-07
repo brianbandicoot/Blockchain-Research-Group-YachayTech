@@ -1,5 +1,5 @@
 /* To compile run the following command on the terminal:
-gcc -o test main.c PoW.c sha256.c file.c validate.c merkleroot.c wallet.c -lm -I.
+gcc -fno-stack-protector -o test main.c PoW.c sha256.c file.c validate.c merkleroot.c wallet.c -lm -I.
 */
 
 /*If you will run the executable to add another transaction to an existing blockchain.dat then you need to modify:
